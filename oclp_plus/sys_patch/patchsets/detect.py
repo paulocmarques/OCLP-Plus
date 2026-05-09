@@ -89,7 +89,7 @@ class HardwarePatchsetValidation(StrEnum):
     NVDA_DRV_MISSING              = "Validation: nvda_drv(_vrl) variable missing"
     PATCHING_NOT_POSSIBLE         = "Validation: Patching not possible"
     UNPATCHING_NOT_POSSIBLE       = "Validation: Unpatching not possible"
-    REPATCHING_NOT_SUPPORTED      = "Validation: Root volume dirty, unpatch to continue"
+    REPATCHING_NOT_SUPPORTED      = "Validation: Root is patched. Revert to repeat."
 
 
 class HardwarePatchsetDetection:
