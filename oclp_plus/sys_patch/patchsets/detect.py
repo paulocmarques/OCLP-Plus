@@ -281,13 +281,11 @@ class HardwarePatchsetDetection:
         return False
 
 
-    def _validation_check_repatching_is_possible(self, manifest_path: Path = None) -> bool:
+    def _validation_check_root_is_dirty(self, manifest_path: Path = None) -> bool:
         """
-        Determine if re-patching is possible
+        Determine if root volume is dirty
         """
-        if self._is_root_volume_dirty(manifest_path) is True:
-            return True
-        return False
+        return self._is_root_volume_dirty(manifest_path)
 
 
     @cache
@@ -542,7 +540,7 @@ class HardwarePatchsetDetection:
             HardwarePatchsetValidation.ROOT_VOLUME_DIRTY:           False,
         }
 
-        if self._validation_check_repatching_is_possible(manifest_path) is True:
+        if self._validation_check_root_is_dirty(manifest_path) is True:
             if manifest_path is not None:
                 requirements[HardwarePatchsetValidation.REPATCHING_NOT_SUPPORTED] = True
             else:
