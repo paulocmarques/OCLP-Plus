@@ -87,7 +87,7 @@ class HardwarePatchsetValidation(StrEnum):
     FORCE_OPENGL_MISSING          = "Validation: Force OpenGL property missing"
     FORCE_COMPAT_MISSING          = "Validation: Force compat property missing"
     NVDA_DRV_MISSING              = "Validation: nvda_drv(_vrl) variable missing"
-    REPATCHING_NOT_SUPPORTED      = "Validation: Please revert root patches before re-patching"
+    REPATCHING_NOT_SUPPORTED      = "Validation: Revert Root Patches before repatching"
     ROOT_VOLUME_DIRTY             = "Validation: Root volume is modified"
     PATCHING_NOT_POSSIBLE         = "Validation: Patching not possible"
     UNPATCHING_NOT_POSSIBLE       = "Validation: Unpatching not possible"
