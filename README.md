@@ -77,6 +77,12 @@ Starting with macOS Tahoe Beta 2, Apple removed the legacy `AppleHDA.kext`. This
 
 ### 💾 Installation Requirements
 💡  **Before Running Post-Install Patches:**
+
+⚠️ **Root Volume Dirty Error:**
+If the patcher detects that the system volume has been modified (e.g., patches already applied or seal broken), it will block further patching to prevent system instability.
+* **To re-patch:** You must first use the "Revert Root Patches" button to restore the original system state.
+* **If no manifest is found:** If the volume is modified but the patcher cannot find a record of what was installed, it will display a "Root volume is modified" error. In this case, you should still attempt a "Revert Root Patches" or reinstall macOS to clean the volume.
+
 * **KDK is mandatory:** For macOS 13 through Tahoe (26.x), the Kernel Debug Kit must be installed for drivers like AppleHDA to link correctly. Use the Help > Download KDK button.
 
 ⚠️ **Resource Dependency Notice**

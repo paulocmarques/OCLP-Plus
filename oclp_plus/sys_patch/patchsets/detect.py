@@ -87,6 +87,8 @@ class HardwarePatchsetValidation(StrEnum):
     FORCE_OPENGL_MISSING          = "Validation: Force OpenGL property missing"
     FORCE_COMPAT_MISSING          = "Validation: Force compat property missing"
     NVDA_DRV_MISSING              = "Validation: nvda_drv(_vrl) variable missing"
+    REPATCHING_NOT_SUPPORTED      = "Validation: Please revert root patches before re-patching"
+    ROOT_VOLUME_DIRTY             = "Validation: Root volume is modified"
     PATCHING_NOT_POSSIBLE         = "Validation: Patching not possible"
     UNPATCHING_NOT_POSSIBLE       = "Validation: Unpatching not possible"
 
@@ -266,6 +268,26 @@ class HardwarePatchsetDetection:
         if nv_on:
             return False
         return True
+
+
+    def _is_root_volume_dirty(self, manifest_path: Path = None) -> bool:
+        """
+        Determine if root volume is dirty
+        """
+        if utilities.check_seal() is False:
+            return True
+        if manifest_path is not None:
+            return True
+        return False
+
+
+    def _validation_check_repatching_is_possible(self, manifest_path: Path = None) -> bool:
+        """
+        Determine if re-patching is possible
+        """
+        if self._is_root_volume_dirty(manifest_path) is True:
+            return True
+        return False
 
 
     @cache
@@ -498,6 +520,8 @@ class HardwarePatchsetDetection:
 
         requires_network_connection = missing_metallib_support_pkg or missing_kernel_debug_kit
 
+        manifest_path = utilities.find_any_oclp_manifest(root_path=Path(self._constants.mount_root) if hasattr(self._constants, "mount_root") else Path("/"))
+
         requirements = {
             HardwarePatchsetSettings.KERNEL_DEBUG_KIT_REQUIRED:     requires_kernel_debug_kit,
             HardwarePatchsetSettings.KERNEL_DEBUG_KIT_MISSING:      missing_kernel_debug_kit,
@@ -514,7 +538,15 @@ class HardwarePatchsetDetection:
             HardwarePatchsetValidation.FORCE_OPENGL_MISSING:        self._validation_check_force_opengl_missing()  if has_nvidia_web_drivers is True else False,
             HardwarePatchsetValidation.FORCE_COMPAT_MISSING:        self._validation_check_force_compat_missing()  if has_nvidia_web_drivers is True else False,
             HardwarePatchsetValidation.NVDA_DRV_MISSING:            self._validation_check_nvda_drv_missing()      if has_nvidia_web_drivers is True else False,
+            HardwarePatchsetValidation.REPATCHING_NOT_SUPPORTED:    False,
+            HardwarePatchsetValidation.ROOT_VOLUME_DIRTY:           False,
         }
+
+        if self._validation_check_repatching_is_possible(manifest_path) is True:
+            if manifest_path is not None:
+                requirements[HardwarePatchsetValidation.REPATCHING_NOT_SUPPORTED] = True
+            else:
+                requirements[HardwarePatchsetValidation.ROOT_VOLUME_DIRTY] = True
 
         _cant_patch   = False
         _cant_unpatch = requirements[HardwarePatchsetValidation.SIP_ENABLED]
