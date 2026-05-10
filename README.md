@@ -68,14 +68,6 @@ Starting with macOS Tahoe Beta 2, Apple removed the legacy `AppleHDA.kext`. This
 >
 >  **Clover:** Ensure RtVariables > HWTarget is NOT set (must be empty) or commented out (e.g., HWTarget?) to keep Apple Secure Boot inactive.
 
-### 🧹 Root Volume Dirty Error
-> **If you get this error:**
->
->  **"Root volume dirty, unpatch to continue"** during the Post-Install Root Patch process, it means macOS Tahoe has flagged the system volume due to incomplete operations or APFS snapshot issues.
->
->  **To fix it:** Open OCLP-Plus on Tahoe. Go to Post-Install Root Patch and click Revert Root Patches (or Unpatch).
->  **Reboot your Mac.** Open OCLP-Plus again and **re-run the Post-Install Root Patch** normally.
-
 ### 🔄 Apply Changes: Reset NVRAM
 > To ensure these new security settings (SIP, AMFI, and Secure Boot) take effect, you MUST perform a Reset NVRAM after saving your config.plist.
 > OpenCore: Select "Reset NVRAM" from the boot picker menu (or press Space if it's hidden).
